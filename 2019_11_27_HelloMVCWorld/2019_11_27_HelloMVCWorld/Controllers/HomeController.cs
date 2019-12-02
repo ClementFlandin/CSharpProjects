@@ -44,17 +44,27 @@ namespace _2019_11_27_HelloMVCWorld.Controllers
 
         //Routing template with optional parameter
 
-        [Route("blog/{entryId}/{slug?}")]
-        public IActionResult Blog(int entryId, string slug)
+        //[Route("blog/{entryId}/{slug?}")]
+        //public IActionResult Blog(int entryId, string slug)
+        //{
+        //    if (slug == null)
+        //    {
+        //        return Content(String.Format("Blog entry with id #" + entryId));
+        //    }
+        //    else
+        //    {
+        //        return Content(String.Format($"Blog entry with id #{entryId} requested (URL slug : {slug})"));
+        //    }
+        //}
+
+        //Route with a regex constraint
+        [Route(@"blog/{slug:regex(^[[0-9]]{{1,7}}\-[[a-z0-9\-]]{{3,50}}$)}")]
+        public IActionResult Blog(string slug)
         {
-            if (slug == null)
-            {
-                return Content(String.Format("Blog entry with id #" + entryId));
-            }
-            else
-            {
-                return Content(String.Format($"Blog entry with id #{entryId} requested (URL slug : {slug})"));
-            }
+            int hyphenPos = slug.IndexOf("-");
+            int entryId = int.Parse(slug.Substring(0, hyphenPos));
+            string slugPart = slug.Substring(hyphenPos + 1);
+            return Content($"Blog entry with Id #{entryId} requested (URL slug: {slugPart})");
         }
     }
 }
