@@ -1,0 +1,120 @@
+using LiteDB;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+ 
+namespace MiniProjet1_GestionnaireMdp
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+ 
+            // Mettre à jour le tableau avec le contenu de la base LiteDb
+            AfficherComptes();
+        }
+ 
+        private void BoutonAjouter_Click(object sender, EventArgs e)
+        {
+            // 1. Vérifier que le noms du site ou d'utilisateur ne sont pas vides
+ 
+            if (TextNomDuSite.Text == "" || TextNomUtilisateur.Text == "")
+            {
+                MessageBox.Show(
+                    "Le nom du site ou le nom d'utilisateur sont vides.",
+                    "Erreur",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+ 
+                return; // Avec return, on arrête l'exécution de la méthode
+            }
+ 
+            // 2. Vérifier que le mot de passe fourni
+            // est de niveau Strong ou VeryStrong
+ 
+            string motDePasse = TextMotDePasse.Text;
+            PasswordAdvisor.PasswordScore score = PasswordAdvisor.CheckStrength(motDePasse);
+ 
+            if (score != PasswordAdvisor.PasswordScore.VeryStrong)
+            {
+                MessageBox.Show(
+                    String.Format("Le mot de passe saisi n'est pas suffisamment robuste.\nForce du mot de passe : {0}", score.ToString()),
+                    "Erreur",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+ 
+                return;
+            }
+ 
+            // 3. Vérifier que le mot de passe haché (SHA256)
+            // n'est pas déjà présent dans la base de données
+ 
+            // On hache le mot de passe car les mots de passe sont stockés
+            // dans la base de données sous forme de hash
+            string hashMdp = Hash.GetHashSha256(motDePasse);
+ 
+            // On récupère la liste de comptes comprenant chacun le hash
+            IEnumerable<CompteUtilisateur> listeComptes = Data.RecupererListeComptes();
+ 
+            // On vérifie que le hash et donc le mot de passe
+            // n'existe pas déjà
+            bool motDePasseDejaExistant = false;
+            foreach (CompteUtilisateur compte in listeComptes)
+            {
+                if (compte.HashMotDePasse == hashMdp)
+                {
+                    motDePasseDejaExistant = true;
+                }
+            }
+ 
+            if (motDePasseDejaExistant)
+            {
+                MessageBox.Show(
+                    "Le mot de passe saisi existe déjà pour un site. Choisir un autre mot de passe.",
+                    "Erreur",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+ 
+                return;
+            }
+ 
+            // 4. Les vérifications de mot de passe sont terminées
+            // On peut stocker les données ajoutées par l'utilisateur
+            // dans la base de données
+ 
+            CompteUtilisateur nouvauCompte = new CompteUtilisateur
+            {
+                NomSiteWeb = TextNomDuSite.Text,
+                NomUtilisateur = TextNomUtilisateur.Text,
+                HashMotDePasse = hashMdp
+            };
+ 
+            Data.AjouterCompte(nouvauCompte);
+ 
+            // 5. Mettre à jour le tableau avec le contenu de la base LiteDb
+            AfficherComptes();
+        }
+ 
+        private void AfficherComptes()
+        {
+            // On efface les lignes (rows) dans le tableau
+            TableauDonnees.Rows.Clear();
+ 
+            // On récupère la liste des comptes depuis la base
+            IEnumerable<CompteUtilisateur> listeComptes = Data.RecupererListeComptes();
+ 
+            // On affiche chaque compte utilisateur dans une ligne du tableau
+            foreach (CompteUtilisateur compte in listeComptes)
+            {
+                TableauDonnees.Rows.Add(compte.NomSiteWeb, compte.NomUtilisateur, compte.HashMotDePasse);
+            }
+        }
+    }
+}

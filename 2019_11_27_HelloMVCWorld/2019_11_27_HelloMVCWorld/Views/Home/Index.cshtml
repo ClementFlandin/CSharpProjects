@@ -1,0 +1,30 @@
+﻿@*@model _2019_11_27_HelloMVCWorld.Models.Product*@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.ProductTitle</title>
+</head>
+<body>
+    <h1>@ViewBag.ProductTitle</h1>
+    Price: @ViewBag.ProductPrice
+    <br />
+    <br />
+    @await Html.PartialAsync("_Greeting")
+
+    <span>...more stuff here</span>
+
+    @section Footer {
+        <span>
+            Hello from the <b>Products</b> page!
+        </span>
+    }
+</body>
+</html>
