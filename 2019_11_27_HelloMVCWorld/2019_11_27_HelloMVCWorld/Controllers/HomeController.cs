@@ -34,5 +34,10 @@ namespace _2019_11_27_HelloMVCWorld.Controllers
             };
             return View(movie);
         }
+        [Route("blog/{entryId}/{slug}")]
+        public IActionResult Blog(int entryId, string slug)
+        {
+            return Content($"Blog entry with id #{entryId} requested (URL slug : {slug})");
+        }
     }
 }
