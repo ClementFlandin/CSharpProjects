@@ -29,9 +29,10 @@ namespace _2019_11_27_HelloMVCWorld
             }
             app.UseMvcWithDefaultRoute();
             app.UseRouting();
+            app.UseMvc(routes => routes.MapRoute("Products", "Products/{action=Index}/{id?}", new { controller = "Products" }));
             app.UseMvc(routes => routes.MapRoute("ProductList", "Products/List/", new { controller = "Products", action = "List" }));
             app.UseMvc(routes => routes.MapRoute("Default", "{controller=Home}/{action=Movies}"));
-            app.UseMvc(routes => routes.MapRoute("Products", "Products/{action=Index}/{id?}", new { controller = "Products" }));
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
