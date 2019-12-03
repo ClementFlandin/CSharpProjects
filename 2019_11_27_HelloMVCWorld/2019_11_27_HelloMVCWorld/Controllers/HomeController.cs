@@ -66,5 +66,16 @@ namespace _2019_11_27_HelloMVCWorld.Controllers
             string slugPart = slug.Substring(hyphenPos + 1);
             return Content($"Blog entry with Id #{entryId} requested (URL slug: {slugPart})");
         }
+
+        [HttpGet]
+        public IActionResult SimpleBinding()
+        {
+            return View(new WebUser() { FirstName = "John", LastName = "Doe" });
+        }
+        //[HttpPost]
+        //public IActionResult SimpleBinding(WebUser webUser)
+        //{
+        //    return Content($"User {webUser.FirstName} was updated");
+        //}
     }
 }

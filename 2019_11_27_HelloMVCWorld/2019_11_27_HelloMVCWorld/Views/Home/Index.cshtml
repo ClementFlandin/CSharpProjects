@@ -1,5 +1,5 @@
 ﻿@*@model _2019_11_27_HelloMVCWorld.Models.Product*@
-
+@model _2019_11_27_HelloMVCWorld.Models.WebUser
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Index";
@@ -20,7 +20,21 @@
     @await Html.PartialAsync("_Greeting")
 
     <span>...more stuff here</span>
+    <br />
+    @using(var form = Html.BeginForm())
+    {
+        <div>
+            @Html.LabelFor(m => m.FirstName)
+            @Html.TextBoxFor(m=>m.FirstName)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.LastName)
+            @Html.TextBoxFor(m => m.LastName)
+        </div>
 
+        <input type="submit" value="Submit" />
+    }
+    <br />
     @section Footer {
         <span>
             Hello from the <b>Products</b> page!
