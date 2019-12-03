@@ -1,5 +1,6 @@
 ﻿@*@model _2019_11_27_HelloMVCWorld.Models.Product*@
 @model _2019_11_27_HelloMVCWorld.Models.WebUser
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Index";
@@ -21,17 +22,24 @@
 
     <span>...more stuff here</span>
     <br />
-    @using(var form = Html.BeginForm())
+    <br />
+    @using (var form = Html.BeginForm())
     {
         <div>
             @Html.LabelFor(m => m.FirstName)
-            @Html.TextBoxFor(m=>m.FirstName)
+            @Html.TextBoxFor(m => m.FirstName)
+            @Html.ValidationMessageFor(m => m.FirstName)
         </div>
         <div>
             @Html.LabelFor(m => m.LastName)
             @Html.TextBoxFor(m => m.LastName)
+            @Html.ValidationMessageFor(m => m.LastName)
         </div>
-
+        <div>
+            @Html.LabelFor(m => m.MailAddress)
+            @Html.TextBoxFor(m => m.MailAddress)
+            @Html.ValidationMessageFor(m => m.MailAddress)
+        </div>
         <input type="submit" value="Submit" />
     }
     <br />

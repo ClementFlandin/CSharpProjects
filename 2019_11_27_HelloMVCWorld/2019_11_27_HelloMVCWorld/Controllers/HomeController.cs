@@ -34,6 +34,7 @@ namespace _2019_11_27_HelloMVCWorld.Controllers
             };
             return View(movie);
         }
+
         //Routing template with catch-all parameter
 
         //[Route("blog/{entryId}/{*slug}")]
@@ -70,11 +71,12 @@ namespace _2019_11_27_HelloMVCWorld.Controllers
         [HttpGet]
         public IActionResult SimpleBinding()
         {
-            return View(new WebUser() { FirstName = "John", LastName = "Doe" });
+            return View(new WebUser() { FirstName = "John", LastName = "Doe" , MailAddress = "john.doe@mail.com"});
         }
         //[HttpPost]
         //public IActionResult SimpleBinding(WebUser webUser)
         //{
+        //    TODO: Update in DB here...
         //    return Content($"User {webUser.FirstName} was updated");
         //}
     }
